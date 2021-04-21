@@ -6,6 +6,7 @@
 package com.aulajpa.treinamento.controllers;
 
 import com.aulajpa.treinamento.entities.User;
+import com.aulajpa.treinamento.exception.UserNotFoundException;
 import com.aulajpa.treinamento.repository.UserRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,10 +31,6 @@ public class UserController {
 
     @Autowired
     private UserRepository repository;
-
-    public int getPageSize() {
-        return 25;
-    }
 
     @GetMapping
     public ResponseEntity<List<User>> findAll() {
@@ -53,7 +52,7 @@ public class UserController {
         Page<User> result = repository.searchSalary(minSalary, maxSalary, pageable);
         return ResponseEntity.ok(result);
     }
-    
+
     @GetMapping(value = "/seach-name")
     public ResponseEntity<Page<User>> searchByName(
             @RequestParam(defaultValue = "") String name,
@@ -62,4 +61,9 @@ public class UserController {
         return ResponseEntity.ok(result);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteById(@PathVariable Long id) throws UserNotFoundException {
+        repository.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
 }
