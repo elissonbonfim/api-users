@@ -21,14 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/users")
 public class UserController {
-
+    
     @Autowired
     private UserRepository repository;
-
+    
     @GetMapping
-    public ResponseEntity<List<User>> findAll() {
+    public ResponseEntity<List<User>> findAll(){
         List<User> result = repository.findAll();
         return ResponseEntity.ok(result);
     }
-
+    
 }
